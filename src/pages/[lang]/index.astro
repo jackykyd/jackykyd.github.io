@@ -1,0 +1,83 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import ScrollNarrative from "@/components/ScrollNarrative.astro";
+import { locales, projects, type Locale } from "@/data/projects";
+import { siteCopy } from "@/data/site";
+
+export function getStaticPaths() {
+  return locales.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+const copy = siteCopy[lang];
+const featuredPhotography = projects.filter(
+  (project) => project.discipline === "photography" && project.featured
+);
+const morePhotography = projects.filter(
+  (project) => project.discipline === "photography" && !project.featured
+);
+const designProjects = projects.filter((project) => project.discipline === "design");
+const alternatePath = `/${lang === "zh" ? "en" : "zh"}/`;
+const ergunHeroImages = [
+  "/assets/projects/ergun-river/evening-wind.png",
+  "/assets/projects/ergun-river/frozen-river-game.png",
+  "/assets/projects/ergun-river/sleeping-dog.png",
+  "/assets/projects/ergun-river/blue-basin.png",
+  "/assets/projects/ergun-river/ice-bicycle.png",
+  "/assets/projects/ergun-river/market-snow.png"
+];
+---
+
+<BaseLayout lang={lang} title={copy.photography} description={copy.intro} alternatePath={alternatePath} overlayHeader>
+  <ScrollNarrative />
+
+  <section class="hero hero--slider" data-narrative="hero">
+    <div class="hero-slider" aria-label="Ergun River visual sequence">
+      <div class="hero-slider__track">
+        {ergunHeroImages.map((image, index) => (
+          <figure class="hero-slide">
+            <img src={image} alt={`Ergun River ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+          </figure>
+        ))}
+      </div>
+    </div>
+    <div class="hero-overlay">
+      <p class="kicker">{copy.role}</p>
+      <h1>{copy.name}</h1>
+      <p>{copy.intro}</p>
+      <a class="hero-link" href={`/${lang}/projects/ergun-river/`}>Ergun River</a>
+    </div>
+  </section>
+
+  <section class="section" id="work" aria-labelledby="photography-heading" data-scene="photography">
+    <div class="section-heading">
+      <div>
+        <h2 id="photography-heading">{copy.photography}</h2>
+      </div>
+    </div>
+    <div class="featured-grid">
+      {featuredPhotography.map((project) => <ProjectCard project={project} lang={lang} size="large" />)}
+    </div>
+    <div class="subsection-heading">
+      <span>{copy.morePhotography}</span>
+    </div>
+    <div class="photo-study-grid">
+      {morePhotography.map((project) => <ProjectCard project={project} lang={lang} />)}
+    </div>
+  </section>
+
+  <section class="section section--design" id="design" aria-labelledby="design-heading" data-scene="design">
+    <div class="section-heading">
+      <h2 id="design-heading">{copy.design}</h2>
+    </div>
+    <div class="design-grid">
+      {designProjects.map((project) => <ProjectCard project={project} lang={lang} size="large" />)}
+    </div>
+  </section>
+
+  <section class="about-band about-band--contact" id="about" data-scene="about">
+    <h2>{copy.contact}</h2>
+    <p>{copy.contactText}</p>
+  </section>
+</BaseLayout>

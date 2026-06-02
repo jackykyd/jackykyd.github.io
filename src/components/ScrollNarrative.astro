@@ -1,0 +1,147 @@
+<div class="scroll-progress" aria-hidden="true">
+  <span></span>
+</div>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.set(".scroll-progress span", { scaleX: 0, transformOrigin: "left center" });
+    gsap.to(".scroll-progress span", {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.2
+      }
+    });
+
+    const hero = document.querySelector(".hero--slider");
+    const heroTrack = document.querySelector(".hero-slider__track");
+    const heroSlides = document.querySelectorAll(".hero-slide");
+
+    if (hero && heroTrack && heroSlides.length > 1) {
+      gsap.from(".hero-overlay > *", {
+        y: 30,
+        duration: 0.9,
+        ease: "power3.out",
+        stagger: 0.08
+      });
+
+      gsap.to(heroTrack, {
+        x: () => -(heroTrack.scrollWidth - window.innerWidth),
+        duration: heroSlides.length * 4.2,
+        ease: "none",
+        repeat: -1,
+        yoyo: true,
+        invalidateOnRefresh: true
+      });
+    }
+
+    document.querySelectorAll("[data-scene]").forEach((scene) => {
+      const heading = scene.querySelector(".section-heading");
+      const subheading = scene.querySelector(".subsection-heading");
+      const cards = scene.querySelectorAll(".project-card");
+      const aboutItems = scene.matches(".about-band") ? scene.children : [];
+
+      if (heading) {
+        gsap.from(heading, {
+          y: 36,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: scene,
+            start: "top 78%",
+            once: true
+          }
+        });
+      }
+
+      if (subheading) {
+        gsap.from(subheading, {
+          y: 20,
+          duration: 0.65,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: subheading,
+            start: "top 86%",
+            once: true
+          }
+        });
+      }
+
+      if (cards.length) {
+        gsap.from(cards, {
+          y: 54,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.14,
+          scrollTrigger: {
+            trigger: cards[0],
+            start: "top 82%",
+            once: true
+          }
+        });
+      }
+
+      if (aboutItems.length) {
+        gsap.from(aboutItems, {
+          y: 32,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: scene,
+            start: "top 82%",
+            once: true
+          }
+        });
+      }
+    });
+
+    document.querySelectorAll(".project-card figure").forEach((figure) => {
+      gsap.fromTo(
+        figure,
+        { clipPath: "inset(6% 0% 6% 0%)" },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: figure,
+            start: "top 84%",
+            once: true
+          }
+        }
+      );
+    });
+
+    document.querySelectorAll(".project-card figure img, .lead-image img").forEach((image) => {
+      gsap.fromTo(
+        image,
+        { yPercent: -3, scale: 1.04 },
+        {
+          yPercent: 3,
+          scale: 1.04,
+          ease: "none",
+          scrollTrigger: {
+            trigger: image,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+          }
+        }
+      );
+    });
+
+    ScrollTrigger.refresh();
+    window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+  }
+</script>

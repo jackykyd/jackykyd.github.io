@@ -1,0 +1,36 @@
+---
+import type { Locale, Project } from "@/data/projects";
+import { siteCopy } from "@/data/site";
+
+type Props = {
+  project: Project;
+  lang: Locale;
+  size?: "large" | "small";
+};
+
+const { project, lang, size = "small" } = Astro.props;
+const copy = project[lang];
+const site = siteCopy[lang];
+const imageFrameClass = `project-card__image-frame${
+  project.coverFit === "contain" ? " project-card__image-frame--contain" : ""
+}`;
+---
+
+<article class={`project-card project-card--${size}`}>
+  <a href={`/${lang}/projects/${project.slug}/`} aria-label={`${site.viewProject}: ${copy.title}`}>
+    <figure class={imageFrameClass}>
+      <img src={project.cover} alt={copy.title} loading={size === "large" ? "eager" : "lazy"} />
+    </figure>
+    <div class="project-card__body">
+      <p class="eyebrow">
+        <span>{project.order}</span>
+        <span>{project.year}</span>
+        <span>{copy.category}</span>
+      </p>
+      <h3>{copy.title}</h3>
+      <p class="subtitle">{copy.subtitle}</p>
+      <p>{copy.summary}</p>
+      <span class="text-link">{site.viewProject}</span>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,77 @@
+---
+import "../styles/global.css";
+import type { Locale } from "@/data/projects";
+import { siteCopy } from "@/data/site";
+
+type Props = {
+  lang: Locale;
+  title?: string;
+  description?: string;
+  alternatePath?: string;
+  overlayHeader?: boolean;
+};
+
+const {
+  lang,
+  title,
+  description,
+  alternatePath = `/${lang === "zh" ? "en" : "zh"}/`,
+  overlayHeader = false
+} = Astro.props;
+const copy = siteCopy[lang];
+const pageTitle = title ? `${title} - ${copy.name}` : copy.name;
+const pageDescription = description ?? copy.intro;
+---
+
+<!doctype html>
+<html lang={lang === "zh" ? "zh-CN" : "en"}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={pageDescription} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <header class={`site-header${overlayHeader ? " site-header--overlay" : ""}`} data-site-header>
+      <a class="brand" href={`/${lang}/`} aria-label={copy.name}>
+        <span class="brand-mark">FC</span>
+        <span>{copy.name}</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href={`/${lang}/#work`}>{copy.navPhotography}</a>
+        <a href={`/${lang}/#design`}>{copy.navDesign}</a>
+        <a href={`/${lang}/#about`}>{copy.navContact}</a>
+        <a class="lang-switch" href={alternatePath}>{copy.languageLabel}</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <script is:inline>
+      (() => {
+        const header = document.querySelector("[data-site-header]");
+        const setHeaderState = () => {
+          if (!header) return;
+          const hero = document.querySelector(".hero--slider");
+          const isOverlayHeader = header.classList.contains("site-header--overlay");
+          const solidFrom = hero
+            ? hero.offsetTop + hero.offsetHeight - header.offsetHeight
+            : 16;
+          const shouldBeSolid = isOverlayHeader
+            ? window.scrollY >= solidFrom
+            : window.scrollY > solidFrom;
+          header.classList.toggle("is-solid", shouldBeSolid);
+        };
+
+        requestAnimationFrame(setHeaderState);
+        setTimeout(setHeaderState, 80);
+        setTimeout(setHeaderState, 280);
+        window.addEventListener("load", setHeaderState, { once: true });
+        window.addEventListener("hashchange", setHeaderState);
+        window.addEventListener("scroll", setHeaderState, { passive: true });
+        window.addEventListener("resize", setHeaderState);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { locales, projects, type Locale } from "@/data/projects";
+import { siteCopy } from "@/data/site";
+
+export function getStaticPaths() {
+  return locales.flatMap((lang) =>
+    projects.map((project) => ({
+      params: { lang, slug: project.slug }
+    }))
+  );
+}
+
+const lang = Astro.params.lang as Locale;
+const slug = Astro.params.slug as string;
+const project = projects.find((item) => item.slug === slug);
+
+if (!project) {
+  return Astro.redirect(`/${lang}/`);
+}
+
+const copy = project[lang];
+const site = siteCopy[lang];
+const alternatePath = `/${lang === "zh" ? "en" : "zh"}/projects/${project.slug}/`;
+const leadImageClass = `lead-image${project.coverFit === "contain" ? " lead-image--contain" : ""}`;
+const galleryImages = Array.from(new Set(project.images)).filter((image) => image !== project.cover);
+const galleryClass = `project-gallery project-gallery--${project.discipline}`;
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.summary} alternatePath={alternatePath}>
+  <article class="project-detail">
+    <a class="back-link" href={`/${lang}/#work`}>{site.back}</a>
+
+    <header class="project-hero">
+      <div class="project-hero__meta">
+        <p class="eyebrow">
+          <span>{project.order}</span>
+          <span>{project.year}</span>
+          <span>{copy.category}</span>
+        </p>
+        <h1>{copy.title}</h1>
+        <p class="subtitle">{copy.subtitle}</p>
+      </div>
+      <p>{copy.summary}</p>
+    </header>
+
+    <figure class={leadImageClass}>
+      <img src={project.cover} alt={copy.title} />
+    </figure>
+
+    <section class="project-info-grid">
+      <div>
+        <p class="eyebrow">{site.methods}</p>
+        <ul>
+          {copy.method.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow">{site.roleTitle}</p>
+        <p>{copy.role}</p>
+      </div>
+      <div>
+        <p class="eyebrow">{site.publicNoteTitle}</p>
+        <p>{copy.publicNote}</p>
+      </div>
+    </section>
+
+    <section class={galleryClass} aria-label={`${copy.title} images`}>
+      {galleryImages.map((image, index) => (
+        <figure>
+          <button class="gallery-button" type="button" data-lightbox-src={image} data-lightbox-alt={`${copy.title} ${index + 1}`}>
+            <img src={image} alt={`${copy.title} ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+          </button>
+        </figure>
+      ))}
+    </section>
+
+    <div class="lightbox" data-lightbox hidden>
+      <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close image">Close</button>
+      <img src="" alt="" data-lightbox-image />
+    </div>
+  </article>
+  <script is:inline>
+    (() => {
+      const lightbox = document.querySelector("[data-lightbox]");
+      const image = document.querySelector("[data-lightbox-image]");
+      const closeButton = document.querySelector("[data-lightbox-close]");
+      const triggers = Array.from(document.querySelectorAll("[data-lightbox-src]"));
+      let activeIndex = 0;
+
+      if (!lightbox || !image || !closeButton || !triggers.length) return;
+
+      const show = (index) => {
+        activeIndex = (index + triggers.length) % triggers.length;
+        const trigger = triggers[activeIndex];
+        image.setAttribute("src", trigger.dataset.lightboxSrc || "");
+        image.setAttribute("alt", trigger.dataset.lightboxAlt || "");
+      };
+
+      const open = (index) => {
+        show(index);
+        lightbox.hidden = false;
+        document.body.classList.add("has-lightbox");
+      };
+
+      const close = () => {
+        lightbox.hidden = true;
+        image.setAttribute("src", "");
+        document.body.classList.remove("has-lightbox");
+      };
+
+      const prev = () => show(activeIndex - 1);
+      const next = () => show(activeIndex + 1);
+
+      triggers.forEach((trigger, index) => {
+        trigger.addEventListener("click", () => open(index));
+      });
+
+      closeButton.addEventListener("click", close);
+      image.addEventListener("click", (event) => {
+        const bounds = image.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width;
+        if (x < 0.5) {
+          prev();
+        } else {
+          next();
+        }
+      });
+      lightbox.addEventListener("click", (event) => {
+        if (event.target === lightbox) close();
+      });
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !lightbox.hidden) close();
+        if (event.key === "ArrowLeft" && !lightbox.hidden) prev();
+        if (event.key === "ArrowRight" && !lightbox.hidden) next();
+      });
+    })();
+  </script>
+</BaseLayout>
