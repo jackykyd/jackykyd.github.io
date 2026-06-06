@@ -30,6 +30,7 @@ const pageDescription = description ?? copy.intro;
     <meta name="description" content={pageDescription} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
   </head>
   <body>
@@ -40,7 +41,8 @@ const pageDescription = description ?? copy.intro;
       </a>
       <nav class="site-nav" aria-label="Primary navigation">
         <a href={`/${lang}/#work`}>{copy.navPhotography}</a>
-        <a href={`/${lang}/#design`}>{copy.navDesign}</a>
+        <a href={`/${lang}/#writing`}>{copy.navWriting}</a>
+        <a href={`/${lang}/#motion`}>{copy.navMotion}</a>
         <a href={`/${lang}/#about`}>{copy.navContact}</a>
         <a class="lang-switch" href={alternatePath}>{copy.languageLabel}</a>
       </nav>

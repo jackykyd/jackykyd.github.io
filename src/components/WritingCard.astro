@@ -1,0 +1,32 @@
+---
+import type { Locale } from "@/data/projects";
+import type { Writing } from "@/data/writings";
+import { siteCopy } from "@/data/site";
+
+type Props = {
+  writing: Writing;
+  lang: Locale;
+};
+
+const { writing, lang } = Astro.props;
+const copy = writing[lang];
+const site = siteCopy[lang];
+---
+
+<article class="writing-card">
+  <a href={`/${lang}/writing/${writing.slug}/`} aria-label={`${site.viewProject}: ${copy.title}`}>
+    <figure>
+      <img src={writing.cover} alt={copy.title} loading="lazy" />
+    </figure>
+    <div class="writing-card__body">
+      <p class="eyebrow">
+        <span>{writing.year}</span>
+        <span>{copy.category}</span>
+      </p>
+      <h3>{copy.title}</h3>
+      <p class="subtitle">{copy.subtitle}</p>
+      <p>{copy.summary}</p>
+      <span class="text-link">{site.viewProject}</span>
+    </div>
+  </a>
+</article>

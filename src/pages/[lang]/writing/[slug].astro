@@ -1,0 +1,73 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { locales, type Locale } from "@/data/projects";
+import { siteCopy } from "@/data/site";
+import { writings } from "@/data/writings";
+
+export function getStaticPaths() {
+  return locales.flatMap((lang) =>
+    writings.map((writing) => ({
+      params: { lang, slug: writing.slug }
+    }))
+  );
+}
+
+const lang = Astro.params.lang as Locale;
+const slug = Astro.params.slug as string;
+const writing = writings.find((item) => item.slug === slug);
+
+if (!writing) {
+  return Astro.redirect(`/${lang}/#writing`);
+}
+
+const copy = writing[lang];
+const site = siteCopy[lang];
+const alternatePath = `/${lang === "zh" ? "en" : "zh"}/writing/${writing.slug}/`;
+const inlineImages = writing.images.slice(1);
+const imageSlots = new Map(
+  inlineImages.map((image, index) => [Math.min(10 + index * 14, writing.paragraphs.length - 1), image])
+);
+const isChapter = (paragraph: string) => /^第.+章/.test(paragraph);
+const imageCaption = (index: number) =>
+  lang === "zh" ? `关联图像 ${String(index + 2).padStart(2, "0")}` : `Associated image ${String(index + 2).padStart(2, "0")}`;
+---
+
+<BaseLayout lang={lang} title={copy.title} description={copy.summary} alternatePath={alternatePath}>
+  <article class="writing-detail">
+    <a class="back-link" href={`/${lang}/#writing`}>{site.back}</a>
+
+    <header class="writing-hero">
+      <p class="eyebrow">
+        <span>{writing.year}</span>
+        <span>{copy.category}</span>
+      </p>
+      <h1>{copy.title}</h1>
+      <p class="subtitle">{copy.subtitle}</p>
+      <p>{copy.summary}</p>
+      <p class="writing-note">{copy.note}</p>
+    </header>
+
+    <figure class="writing-lead-image">
+      <img src={writing.cover} alt={copy.title} />
+    </figure>
+
+    <section class="writing-body" aria-label={copy.title}>
+      {writing.paragraphs.map((paragraph, index) => {
+        const inlineImage = imageSlots.get(index);
+        const imageIndex = inlineImages.indexOf(inlineImage ?? "");
+
+        return (
+          <>
+            {isChapter(paragraph) ? <h2>{paragraph}</h2> : <p>{paragraph}</p>}
+            {inlineImage ? (
+              <figure class="writing-inline-image">
+                <img src={inlineImage} alt={`${copy.title} ${imageIndex + 2}`} loading="lazy" />
+                <figcaption>{imageCaption(imageIndex)}</figcaption>
+              </figure>
+            ) : null}
+          </>
+        );
+      })}
+    </section>
+  </article>
+</BaseLayout>

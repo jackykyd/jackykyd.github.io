@@ -4,6 +4,8 @@ import ProjectCard from "@/components/ProjectCard.astro";
 import ScrollNarrative from "@/components/ScrollNarrative.astro";
 import { locales, projects, type Locale } from "@/data/projects";
 import { siteCopy } from "@/data/site";
+import { writings } from "@/data/writings";
+import WritingCard from "@/components/WritingCard.astro";
 
 export function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang } }));
@@ -17,7 +19,8 @@ const featuredPhotography = projects.filter(
 const morePhotography = projects.filter(
   (project) => project.discipline === "photography" && !project.featured
 );
-const designProjects = projects.filter((project) => project.discipline === "design");
+const motionProjects = projects.filter((project) => project.discipline === "motion");
+const writingItems = writings;
 const alternatePath = `/${lang === "zh" ? "en" : "zh"}/`;
 const ergunHeroImages = [
   "/assets/projects/ergun-river/evening-wind.png",
@@ -67,12 +70,21 @@ const ergunHeroImages = [
     </div>
   </section>
 
-  <section class="section section--design" id="design" aria-labelledby="design-heading" data-scene="design">
+  <section class="section section--writing" id="writing" aria-labelledby="writing-heading" data-scene="writing">
     <div class="section-heading">
-      <h2 id="design-heading">{copy.design}</h2>
+      <h2 id="writing-heading">{copy.writing}</h2>
     </div>
-    <div class="design-grid">
-      {designProjects.map((project) => <ProjectCard project={project} lang={lang} size="large" />)}
+    <div class="writing-grid">
+      {writingItems.map((writing) => <WritingCard writing={writing} lang={lang} />)}
+    </div>
+  </section>
+
+  <section class="section section--motion" id="motion" aria-labelledby="motion-heading" data-scene="motion">
+    <div class="section-heading">
+      <h2 id="motion-heading">{copy.motion}</h2>
+    </div>
+    <div class="motion-grid">
+      {motionProjects.map((project) => <ProjectCard project={project} lang={lang} size="large" />)}
     </div>
   </section>
 

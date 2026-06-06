@@ -16,7 +16,7 @@ const imageFrameClass = `project-card__image-frame${
 }`;
 ---
 
-<article class={`project-card project-card--${size}`}>
+<article class={`project-card project-card--${size} project-card--${project.discipline}`}>
   <a href={`/${lang}/projects/${project.slug}/`} aria-label={`${site.viewProject}: ${copy.title}`}>
     <figure class={imageFrameClass}>
       <img src={project.cover} alt={copy.title} loading={size === "large" ? "eager" : "lazy"} />
