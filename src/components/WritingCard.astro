@@ -16,7 +16,7 @@ const site = siteCopy[lang];
 <article class="writing-card">
   <a href={`/${lang}/writing/${writing.slug}/`} aria-label={`${site.viewProject}: ${copy.title}`}>
     <figure>
-      <img src={writing.cover} alt={copy.title} loading="lazy" />
+      <img src={writing.cover} alt={copy.title} loading="lazy" decoding="async" />
     </figure>
     <div class="writing-card__body">
       <p class="eyebrow">

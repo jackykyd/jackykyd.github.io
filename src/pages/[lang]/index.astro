@@ -23,12 +23,12 @@ const motionProjects = projects.filter((project) => project.discipline === "moti
 const writingItems = writings;
 const alternatePath = `/${lang === "zh" ? "en" : "zh"}/`;
 const ergunHeroImages = [
-  "/assets/projects/ergun-river/evening-wind.png",
-  "/assets/projects/ergun-river/frozen-river-game.png",
-  "/assets/projects/ergun-river/sleeping-dog.png",
-  "/assets/projects/ergun-river/blue-basin.png",
-  "/assets/projects/ergun-river/ice-bicycle.png",
-  "/assets/projects/ergun-river/market-snow.png"
+  "/assets/projects/ergun-river/evening-wind-display.webp",
+  "/assets/projects/ergun-river/frozen-river-game-display.webp",
+  "/assets/projects/ergun-river/sleeping-dog-display.webp",
+  "/assets/projects/ergun-river/blue-basin-display.webp",
+  "/assets/projects/ergun-river/ice-bicycle-display.webp",
+  "/assets/projects/ergun-river/market-snow-display.webp"
 ];
 ---
 
@@ -40,7 +40,13 @@ const ergunHeroImages = [
       <div class="hero-slider__track">
         {ergunHeroImages.map((image, index) => (
           <figure class="hero-slide">
-            <img src={image} alt={`Ergun River ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+            <img
+              src={image}
+              alt={`Ergun River ${index + 1}`}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={index === 0 ? "high" : "auto"}
+            />
           </figure>
         ))}
       </div>

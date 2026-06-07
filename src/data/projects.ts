@@ -47,7 +47,7 @@ export const projects: Project[] = [
     featured: true,
     discipline: "photography",
     year: "2026",
-    cover: "/assets/projects/between-night/street-figure.png",
+    cover: "/assets/projects/between-night/street-figure-display.webp",
     images: [
       "/assets/projects/between-night/rain-bus-stop.png",
       "/assets/projects/between-night/factory-court.png",
@@ -98,7 +98,7 @@ export const projects: Project[] = [
     featured: true,
     discipline: "photography",
     year: "2026",
-    cover: "/assets/projects/ergun-river/evening-wind.png",
+    cover: "/assets/projects/ergun-river/evening-wind-display.webp",
     images: [
       "/assets/projects/ergun-river/evening-wind.png",
       "/assets/projects/ergun-river/frozen-river-game.png",
@@ -200,7 +200,7 @@ export const projects: Project[] = [
     discipline: "motion",
     year: "2026",
     coverFit: "contain",
-    cover: "/assets/projects/back-to-2006/scene-006.jpg",
+    cover: "/assets/projects/back-to-2006/scene-006-display.webp",
     images: [
       "/assets/projects/back-to-2006/scene-002.jpg",
       "/assets/projects/back-to-2006/scene-003.jpg",
@@ -416,7 +416,7 @@ export const projects: Project[] = [
     discipline: "motion",
     year: "2026",
     coverFit: "contain",
-    cover: "/assets/projects/classic-car-studies/scene-07.jpg",
+    cover: "/assets/projects/classic-car-studies/scene-07-display.webp",
     images: [
       "/assets/projects/classic-car-studies/scene-01.jpg",
       "/assets/projects/classic-car-studies/scene-02.jpg",
@@ -632,7 +632,7 @@ export const projects: Project[] = [
     discipline: "motion",
     year: "2026",
     coverFit: "contain",
-    cover: "/assets/projects/bubble-economy/scene-06.jpg",
+    cover: "/assets/projects/bubble-economy/scene-06-display.webp",
     images: [
       "/assets/projects/bubble-economy/scene-01.jpg",
       "/assets/projects/bubble-economy/scene-02.jpg",
@@ -773,7 +773,7 @@ export const projects: Project[] = [
     discipline: "photography",
     year: "2026",
     coverFit: "contain",
-    cover: "/assets/projects/overlooked/portrait-03.jpg",
+    cover: "/assets/projects/overlooked/portrait-03-display.webp",
     images: [
       "/assets/projects/overlooked/portrait-03.jpg",
       "/assets/projects/overlooked/delivery-rider.jpg",
@@ -823,7 +823,7 @@ export const projects: Project[] = [
     discipline: "photography",
     year: "2026",
     coverFit: "contain",
-    cover: "/assets/projects/riders/woman-rider.jpg",
+    cover: "/assets/projects/riders/woman-rider-display.webp",
     images: [
       "/assets/projects/riders/woman-rider.jpg",
       "/assets/projects/riders/vendor-tricycle.jpg",

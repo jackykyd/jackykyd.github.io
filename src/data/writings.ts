@@ -22,7 +22,7 @@ export const writings: Writing[] = [
   {
     slug: "dingyang-flying-chicken",
     year: "2026",
-    cover: "/assets/writing/dingyang-flying-chicken/image-01.jpg",
+    cover: "/assets/writing/dingyang-flying-chicken/image-01-display.webp",
     images:     [
           "/assets/writing/dingyang-flying-chicken/image-01.jpg",
           "/assets/writing/dingyang-flying-chicken/image-02.jpg",
