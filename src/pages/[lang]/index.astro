@@ -1,101 +1,12 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
-import ScrollNarrative from "@/components/ScrollNarrative.astro";
-import { locales, projects, type Locale } from "@/data/projects";
-import { siteCopy } from "@/data/site";
-import { writings } from "@/data/writings";
-import WritingCard from "@/components/WritingCard.astro";
+import { locales, type Locale } from "@/data/projects";
+import HomePage from "@/components/HomePage.astro";
 
 export function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang } }));
 }
 
 const lang = Astro.params.lang as Locale;
-const copy = siteCopy[lang];
-const featuredPhotography = projects.filter(
-  (project) => project.discipline === "photography" && project.featured
-);
-const morePhotography = projects.filter(
-  (project) => project.discipline === "photography" && !project.featured
-);
-const motionProjects = projects.filter((project) => project.discipline === "motion");
-const writingItems = writings;
-const alternatePath = `/${lang === "zh" ? "en" : "zh"}/`;
-const ergunHeroImages = [
-  "/assets/projects/ergun-river/evening-wind-display.webp",
-  "/assets/projects/ergun-river/frozen-river-game-display.webp",
-  "/assets/projects/ergun-river/sleeping-dog-display.webp",
-  "/assets/projects/ergun-river/blue-basin-display.webp",
-  "/assets/projects/ergun-river/ice-bicycle-display.webp",
-  "/assets/projects/ergun-river/market-snow-display.webp"
-];
 ---
 
-<BaseLayout lang={lang} title={copy.photography} description={copy.intro} alternatePath={alternatePath} overlayHeader>
-  <ScrollNarrative />
-
-  <section class="hero hero--slider" data-narrative="hero">
-    <div class="hero-slider" aria-label="Ergun River visual sequence">
-      <div class="hero-slider__track">
-        {ergunHeroImages.map((image, index) => (
-          <figure class="hero-slide">
-            <img
-              src={image}
-              alt={`Ergun River ${index + 1}`}
-              loading={index === 0 ? "eager" : "lazy"}
-              decoding="async"
-              fetchpriority={index === 0 ? "high" : "auto"}
-            />
-          </figure>
-        ))}
-      </div>
-    </div>
-    <div class="hero-overlay">
-      <p class="kicker">{copy.role}</p>
-      <h1>{copy.name}</h1>
-      <p>{copy.intro}</p>
-      <a class="hero-link" href={`/${lang}/projects/ergun-river/`}>Ergun River</a>
-    </div>
-  </section>
-
-  <section class="section" id="work" aria-labelledby="photography-heading" data-scene="photography">
-    <div class="section-heading">
-      <div>
-        <h2 id="photography-heading">{copy.photography}</h2>
-      </div>
-    </div>
-    <div class="featured-grid">
-      {featuredPhotography.map((project) => <ProjectCard project={project} lang={lang} size="large" />)}
-    </div>
-    <div class="subsection-heading">
-      <span>{copy.morePhotography}</span>
-    </div>
-    <div class="photo-study-grid">
-      {morePhotography.map((project) => <ProjectCard project={project} lang={lang} />)}
-    </div>
-  </section>
-
-  <section class="section section--writing" id="writing" aria-labelledby="writing-heading" data-scene="writing">
-    <div class="section-heading">
-      <h2 id="writing-heading">{copy.writing}</h2>
-    </div>
-    <div class="writing-grid">
-      {writingItems.map((writing) => <WritingCard writing={writing} lang={lang} />)}
-    </div>
-  </section>
-
-  <section class="section section--motion" id="motion" aria-labelledby="motion-heading" data-scene="motion">
-    <div class="section-heading">
-      <h2 id="motion-heading">{copy.motion}</h2>
-    </div>
-    <div class="motion-grid">
-      {motionProjects.map((project) => <ProjectCard project={project} lang={lang} size="large" />)}
-    </div>
-  </section>
-
-  <section class="about-band about-band--contact" id="about" data-scene="about">
-    <h2>{copy.contact}</h2>
-    <p>{copy.contactText}</p>
-  </section>
-</BaseLayout>
+<HomePage lang={lang} />
